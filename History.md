@@ -13,8 +13,8 @@ unreleased
 * Add support for ETag option in res.sendFile
 * Extend res.links() to allow adding multiple links with the same rel
 * deps: debug@^4.4.0
-* deps: body-parser@^2.1.0
-* deps: router@^2.1.0
+* deps: body-parser@^2.2.0
+* deps: router@^2.2.0
 * deps: nyc@^17.1.0
 * deps: mocha@^10.7.3
 * deps: marked@^15.0.3
@@ -23,7 +23,10 @@ unreleased
 * deps: content-type@^1.0.5
 * deps: connect-redis@^8.0.1
 * deps: supertest@^6.3.4
+* deps: finalhandler@^2.1.0
 * deps: qs@^6.14.0
+* deps: server-static@2.2.0
+* deps: type-is@2.0.1
 
 5.0.1 / 2024-10-08
 ==========
