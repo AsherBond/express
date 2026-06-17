@@ -1,5 +1,12 @@
 # Unreleased Changes
 
+## 🐞 Bug fixes
+
+- Fixed HTTP header conflict between Content-Length and Transfer-Encoding in res.send - by [@YuryShkoda](https://github.com/YuryShkoda) in [#4893](https://github.com/expressjs/express/pull/4893)
+
+
+    Fixed the behavior of `res.send()` to prevent conflicts between `Content-Length` and `Transfer-Encoding` HTTP headers in responses. The `Content-Length` header in `res.send()` is now only added when a `Transfer-Encoding` header is not present, complying with the HTTP specification that states both headers should not coexist in the same response
+
 ## 🚀 Improvements
 
 * Improve HTML structure in `res.redirect()` responses when HTML format is accepted by adding `<!DOCTYPE html>`, `<title>`, and `<body>` tags for better browser compatibility - by [@Bernice55231](https://github.com/Bernice55231) in [#5167](https://github.com/expressjs/express/pull/5167)
@@ -8,6 +15,23 @@
 
     ```js
     app.render('index', null, callback); // now works as expected
+    ```
+
+* Upgrade `content-type` to `^2.0.0`, bringing a faster parser (~1.5x quicker `Content-Type` parsing/formatting in `res.send()`) along with a behavior change: `res.send()` now keeps any existing parameters when adding the charset and no longer throws on a `Content-Type` that fails to parse - by [@blakeembrey](https://github.com/blakeembrey) in [#7234](https://github.com/expressjs/express/pull/7234)
+
+    ```js
+    res.set('Content-Type', 'text/plain; foo=bar').send('hey');
+    // -> Content-Type: text/plain; foo=bar; charset=utf-8
+    ```
+
+* The default error handler now logs the full error object instead of only its stack trace, so nested details such as `Error.cause` and library-specific properties (e.g. Sequelize's `parent`/`original`) are no longer swallowed - by [@Nitin-Mohapatra](https://github.com/Nitin-Mohapatra) in [#6464](https://github.com/expressjs/express/pull/6464)
+
+* Upgrade `content-disposition` to `^2.0.0`, which changes the `Content-Disposition` header emitted by `res.download()`, `res.attachment()`, and `res.sendFile()`: file names that are valid HTTP tokens are no longer wrapped in quotes. This is equivalent per RFC 6266, but applications asserting on the exact header bytes should update their expectations - by [@blakeembrey](https://github.com/blakeembrey) in [#7233](https://github.com/expressjs/express/pull/7233)
+
+    ```js
+    res.attachment('user.html');
+    // before -> Content-Disposition: attachment; filename="user.html"
+    // after  -> Content-Disposition: attachment; filename=user.html
     ```
 
 ## ⚡ Performance
